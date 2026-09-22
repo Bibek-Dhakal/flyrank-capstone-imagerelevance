@@ -44,7 +44,7 @@ select = [
     "C", # flake8-comprehensions
     "B", # flake8-bugbear
 ]
-ignore = ["B008", "E501"]
+ignore = ["B008", "E501", "B904"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=src --cov-report=term-missing"

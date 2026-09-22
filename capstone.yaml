@@ -1,6 +1,7 @@
 run: docker compose up --build -d
-seed: python src/scripts/seed.py
-test: pytest
+seed: docker compose exec api python src/scripts/seed.py
+test: docker compose exec api python src/scripts/eval.py
 base_url: http://localhost:8000
 endpoints:
   - GET /health
+  - GET /api/v1/reviews/

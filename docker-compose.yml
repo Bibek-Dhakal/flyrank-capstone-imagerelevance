@@ -23,6 +23,8 @@ services:
       - VISION_MODEL=gemini/gemini-3.6-flash
     env_file:
       - .env
+    volumes:
+      - ./public:/app/public
     depends_on:
       - db
     restart: unless-stopped
