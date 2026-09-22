@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flyrank-capstone-imagerelevance"
+version = "0.1.0"
+description = "AI Image Understanding & Content Matching Engine"
+authors = [{ name = "Bibek Dhakal" }]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "sqlalchemy",
+    "asyncpg",
+    "pgvector",
+    "litellm",
+    "httpx"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+    "pre-commit"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+]
+ignore = []
+
+[tool.pytest.ini_options]
+addopts = "--cov=src --cov-report=term-missing"
+testpaths = ["tests"]
+asyncio_mode = "auto"
