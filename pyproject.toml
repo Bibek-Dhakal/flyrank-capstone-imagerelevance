@@ -17,7 +17,9 @@ dependencies = [
     "asyncpg",
     "pgvector",
     "litellm",
-    "httpx"
+    "httpx",
+    "tenacity",
+    "alembic"
 ]
 
 [project.optional-dependencies]
@@ -35,14 +37,14 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "C",   # flake8-comprehensions
-    "B",   # flake8-bugbear
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
 ]
-ignore = []
+ignore = ["B008", "E501"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=src --cov-report=term-missing"

@@ -12,5 +12,20 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  api:
+    build: .
+    container_name: imagerelevance_api
+    ports:
+      - "8000:8000"
+    environment:
+      # Override DATABASE_URL to use the internal docker network hostname 'db'
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/imagerelevance
+      - VISION_MODEL=gemini/gemini-3.6-flash
+    env_file:
+      - .env
+    depends_on:
+      - db
+    restart: unless-stopped
+
 volumes:
   postgres_data:

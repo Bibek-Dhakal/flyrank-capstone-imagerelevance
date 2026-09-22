@@ -1,4 +1,4 @@
-run: docker compose up -d && uvicorn src.main:app --reload
+run: docker compose up --build -d
 seed: python src/scripts/seed.py
 test: pytest
 base_url: http://localhost:8000
