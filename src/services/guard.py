@@ -47,6 +47,7 @@ async def execute_mismatch_guard(
             model=settings.vision_model,  # Reuse standard fast LLM for text-to-text here
             messages=messages,
             response_format={"type": "json_object"},
+            num_retries=3,  # Auto-retry on rate limits (429)
         )
 
         cost = 0.0

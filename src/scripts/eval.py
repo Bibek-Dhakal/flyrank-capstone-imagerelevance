@@ -115,9 +115,9 @@ async def run_evaluation():
 
             total_processed += 1
 
-            # Throttle to respect Gemini Free Tier rate limits (15-20 RPM max)
-            print("  Throttling for 4 seconds to respect API rate limits...")
-            await asyncio.sleep(4)
+            # STRICT THROTTLING: Wait 13 seconds to respect Gemini 5 RPM limits.
+            print("  Throttling for 13 seconds to strictly respect API rate limits...")
+            await asyncio.sleep(13)
 
     precision = (correct_matches / total_processed) * 100 if total_processed > 0 else 0
     print("\n" + "=" * 40)
