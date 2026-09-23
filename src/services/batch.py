@@ -14,7 +14,7 @@ from src.services.vision import analyze_image
 logger = logging.getLogger(__name__)
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+@retry(stop=stop_after_attempt(4), wait=wait_exponential(multiplier=2, min=15, max=35))
 async def _do_process_single_image(image_id: uuid.UUID):
     """
     Process a single image, utilizing retries on transient errors.
@@ -102,17 +102,17 @@ async def _do_process_single_image(image_id: uuid.UUID):
 
 async def batch_process_images(image_ids: list[uuid.UUID]):
     """
-    Runs resilient background processing with a concurrency ceiling.
+    Runs resilient background processing with a strict concurrency ceiling.
     """
-    # Reduced concurrency to 2 to heavily respect Gemini Free Tier limits
-    semaphore = asyncio.Semaphore(2)
+    # STRICT THROTTLING: 1 concurrency to prevent blowing past the 5 RPM Gemini Free Tier limit
+    semaphore = asyncio.Semaphore(1)
 
     async def sem_task(image_id):
         async with semaphore:
             try:
                 await _do_process_single_image(image_id)
-                # Sleep between successful processings to throttle request rate
-                await asyncio.sleep(4)
+                # STRICT THROTTLING: Wait 13 seconds between images (~4.6 requests per min)
+                await asyncio.sleep(13)
             except Exception as e:
                 async with AsyncSessionLocal() as session:
                     img = await session.get(Image, image_id)

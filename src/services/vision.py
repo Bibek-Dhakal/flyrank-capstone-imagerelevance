@@ -61,6 +61,7 @@ async def analyze_image(image_url: str) -> tuple[ImageMetadataOutput | None, flo
         response = await acompletion(
             model=settings.vision_model,
             messages=messages,
+            num_retries=3,  # Auto-retry on rate limits (429)
         )
 
         cost = 0.0
