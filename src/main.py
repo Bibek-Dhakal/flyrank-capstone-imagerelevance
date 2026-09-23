@@ -2,10 +2,12 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from src.api.v1 import images, posts, reviews
+from src.config import settings
 from src.db.database import engine
 from src.db.models import Base
 
@@ -18,7 +20,7 @@ async def lifespan(app: FastAPI):
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(Base.metadata.create_all)
 
-    # Ensure public/images directory exists
+    # Ensure the public / images directory exists
     os.makedirs("public/images", exist_ok=True)
     yield
 
@@ -28,6 +30,17 @@ app = FastAPI(
     description="AI Image Understanding & Content Matching Engine",
     version="0.1.0",
     lifespan=lifespan,
+)
+
+# Configure CORS
+origins = [origin.strip() for origin in settings.cors_allowed_origins.split(",") if origin.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Mount the public directory to serve local images
